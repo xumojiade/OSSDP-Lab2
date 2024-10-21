@@ -41,43 +41,30 @@ import java.util.Set;
  * 所有字符串仅包含小写英文字母。
  *
  */
-class Solution6 {
-    Set<String>[] s = new Set[105];
-
-    public List<Integer> peopleIndexes(List<List<String>> favoriteCompanies) {
-        for (int i = 1; i < 105; ++i) {
-            s[i] = new HashSet<String>();
-        }
-        int n = favoriteCompanies.size()-1;
-        List<Integer> ans = new ArrayList<Integer>();
-
-        for (int i = 0; i < n; ++i) {
-            for (String com : favoriteCompanies.get(i)) {
-                s[i].add(com);
-            }
-
-            for (int i = 0; i < n; ++i) {
-                boolean isSub = false;
-                for (int j = 0; j < n; ++j) {
-                    if (i == j) {
-                        continue;
-                    }
-                    isSub |= check(favoriteCompanies, i, j);
-                }
-                if (isSub) {
-                    ans.add(i);
-                }
-            }
-
-            return ans;
-        }
-
-        public boolean check(List<List<String>> favoriteCompanies, int x, int y) {
-            for (String com : favoriteCompanies.get(x)) {
-                if (!s[y].contains(com)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
+public class Solution6 {  
+    public List<Integer> peopleIndexes(List<List<String>> favoriteCompanies) {  
+        List<Set<String>> sets = new ArrayList<>();  
+        List<Integer> ans = new ArrayList<>();  
+  
+        // 将每个用户的收藏转换为集合，并存储在列表中  
+        for (List<String> companyList : favoriteCompanies) {  
+            sets.add(new HashSet<>(companyList));  
+        }  
+  
+        // 检查每个集合是否是其他集合的子集  
+        for (int i = 0; i < sets.size(); i++) {  
+            boolean isSubset = false;  
+            for (int j = 0; j < sets.size(); j++) {  
+                if (i != j && sets.get(j).containsAll(sets.get(i))) {  
+                    isSubset = true;  
+                    break;  
+                }  
+            }  
+            if (!isSubset) {  
+                ans.add(i);  
+            }  
+        }  
+  
+        return ans;  
+    }  
+}
